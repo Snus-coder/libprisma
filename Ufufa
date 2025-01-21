@@ -1,0 +1,30 @@
+public class Bot extends TelegramLongPollingBot {
+
+   private boolean start = false;
+
+   [...]
+}
+
+public void onUpdateReceived(Update update) {
+    [...]                                   //Same variables as the previous versions
+   if(start)                            //If we are start
+       start(id, update.getMessage());     //Call a custom method
+   else
+       copyMessage(id, msg.getMessageId()); //Else proceed normally
+}
+
+private void start(Long id, Message msg) {
+   if(msg.hasText())
+       sendText(id, msg.getText().toUpperCase());
+   else
+       copyMessage(id, msg.getMessageId());  
+}
+
+if(msg.isCommand()){ 
+   if(msg.getText().equals("/start"))         //If the command was /start, we switch gears
+      start = true;
+   else if (msg.getText().equals("/whisper"))  //Otherwise, we return to normal
+      start = false;
+
+   return;                                     //We don't want to echo commands, so we exit
+}
